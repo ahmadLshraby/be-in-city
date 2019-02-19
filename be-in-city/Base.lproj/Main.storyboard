@@ -25,7 +25,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Double tap to drop a pin and view photos" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Azd-Ky-xd3">
-                                        <rect key="frame" x="25" y="20" width="325" height="30"/>
+                                        <rect key="frame" x="25" y="30" width="325" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="797-cb-tpN"/>
                                             <constraint firstAttribute="width" constant="325" id="Byl-ip-POl"/>
@@ -37,9 +37,9 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.95978468656539917" green="0.65036934614181519" blue="0.13712078332901001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="Azd-Ky-xd3" firstAttribute="centerY" secondItem="UjI-Dn-UcX" secondAttribute="centerY" id="0C9-ju-jbp"/>
                                     <constraint firstItem="Azd-Ky-xd3" firstAttribute="centerX" secondItem="UjI-Dn-UcX" secondAttribute="centerX" id="7tP-z8-KCP"/>
                                     <constraint firstAttribute="height" constant="70" id="CDj-ND-FBe"/>
+                                    <constraint firstAttribute="bottom" secondItem="Azd-Ky-xd3" secondAttribute="bottom" constant="10" id="f7H-w6-oMJ"/>
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RTJ-Cd-KTd">
@@ -56,31 +56,33 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zwT-35-dil">
                                 <rect key="frame" x="0.0" y="667" width="375" height="0.0"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" id="BY6-WL-Oes"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="dct-ny-awm" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="1kc-wU-J3y"/>
                             <constraint firstAttribute="trailing" secondItem="dct-ny-awm" secondAttribute="trailing" id="CD5-b6-vh7"/>
-                            <constraint firstItem="zwT-35-dil" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="H76-Gb-OTs"/>
                             <constraint firstItem="UjI-Dn-UcX" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="LDi-0f-2ob"/>
                             <constraint firstItem="zwT-35-dil" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="LG3-Wh-LJ4"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RTJ-Cd-KTd" secondAttribute="bottom" constant="20" id="LLE-3z-44p"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RTJ-Cd-KTd" secondAttribute="trailing" constant="16" id="T3c-Ho-enW"/>
-                            <constraint firstItem="zwT-35-dil" firstAttribute="top" secondItem="dct-ny-awm" secondAttribute="bottom" id="gpT-sG-yIc"/>
+                            <constraint firstAttribute="bottom" secondItem="zwT-35-dil" secondAttribute="bottom" id="WQw-yT-xCP"/>
+                            <constraint firstItem="zwT-35-dil" firstAttribute="top" secondItem="RTJ-Cd-KTd" secondAttribute="bottom" constant="20" id="fRm-M2-Vui"/>
+                            <constraint firstItem="zwT-35-dil" firstAttribute="top" secondItem="dct-ny-awm" secondAttribute="bottom" id="gKT-8n-DrT"/>
                             <constraint firstItem="zwT-35-dil" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="hGt-5W-F9a"/>
-                            <constraint firstAttribute="bottom" secondItem="zwT-35-dil" secondAttribute="bottom" id="jRi-JB-8m5"/>
                             <constraint firstItem="UjI-Dn-UcX" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="k8c-zV-hqH"/>
-                            <constraint firstAttribute="trailing" secondItem="zwT-35-dil" secondAttribute="trailing" id="l2M-k6-1Rf"/>
                             <constraint firstAttribute="trailing" secondItem="zwT-35-dil" secondAttribute="trailing" id="trN-yC-WNr"/>
                             <constraint firstItem="dct-ny-awm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="w3y-sZ-LSP"/>
                             <constraint firstItem="UjI-Dn-UcX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="wsN-qg-OSH"/>
-                            <constraint firstItem="dct-ny-awm" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="xI4-Xv-ibR"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="mapView" destination="dct-ny-awm" id="wqc-ck-vTG"/>
+                        <outlet property="pullUpView" destination="zwT-35-dil" id="AOL-Sm-8kz"/>
+                        <outlet property="pullUpViewHeightCons" destination="BY6-WL-Oes" id="axD-CE-whz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
