@@ -24,6 +24,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     var screenSize = UIScreen.main.bounds   // to use it to define the spinner position
     var spinner: UIActivityIndicatorView?   // can instatiate it when we want in a func
     var progressLbl: UILabel?
+    var collectionView: UICollectionView?
+    var flowLayout = UICollectionViewFlowLayout()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,6 +33,14 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         locationManager.delegate = self
         configureLocationServices()
         addDoubleTab()
+        
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)   // instantiate
+        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")  // register cell
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+        collectionView?.backgroundColor = #colorLiteral(red: 0.9597846866, green: 0.6503693461, blue: 0.1371207833, alpha: 1)
+        
+        pullUpView.addSubview(collectionView!)
     }
     
     func addDoubleTab() {
@@ -60,15 +70,36 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
             self.view.layoutIfNeeded()
         }
     }
-    
+    // MARK: SPINNER IN THE VIEW
     func addSpinner() {
         spinner = UIActivityIndicatorView()   // instatiate it
         // position ( x= half screen width - half spinner (to align it), y= pullUpView/2 = 300/2 = 150)
         spinner?.center = CGPoint(x: (screenSize.width / 2) - ((spinner?.frame.width)! / 2), y: 150)
         spinner?.style = .whiteLarge
-        spinner?.color = #colorLiteral(red: 0.9597846866, green: 0.6503693461, blue: 0.1371207833, alpha: 1)
+        spinner?.color = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         spinner?.startAnimating()
-        pullUpView.addSubview(spinner!)
+        collectionView?.addSubview(spinner!)
+    }
+    
+    func removeSpinner() {
+        if spinner != nil {
+            spinner?.removeFromSuperview()
+        }
+    }
+    // MARK: LABEL IN THE VIEW
+    func addProgressLbl() {
+        progressLbl = UILabel()   // instatiate
+        progressLbl?.frame = CGRect(x: (screenSize.width / 2) - 100, y: 175, width: 200, height: 40)
+        progressLbl?.font = UIFont(name: "Avenir Next", size: 18)
+        progressLbl?.textColor = #colorLiteral(red: 0.2126879096, green: 0.2239724994, blue: 0.265286684, alpha: 1)
+        progressLbl?.textAlignment = .center
+        collectionView?.addSubview(progressLbl!)
+    }
+    
+    func removeProgreeLbl() {
+        if progressLbl != nil {
+            progressLbl?.removeFromSuperview()
+        }
     }
     
     
@@ -112,8 +143,12 @@ extension MapVC: MKMapViewDelegate {
     
     @objc func dropPin(sender: UITapGestureRecognizer) {
         removePin()   // if there was no pin it consider that your current location is a default annotation
+        removeSpinner()   // as when we drop a pin it creates another spinner above the old one
+        removeProgreeLbl()
+        
         animateViewUp()
         addSpinner()
+        addProgressLbl()
         addSwipe()
         
         // add touchPoint to convert the dropped pin to the exact location
@@ -152,5 +187,26 @@ extension MapVC: CLLocationManagerDelegate {
     // when allow authorization we center the map
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         centerMapOnUserLocation()
+    }
+}
+
+
+extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 4
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell {
+            
+            return cell
+        }else {
+        return UICollectionViewCell()
+        }
     }
 }
