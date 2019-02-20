@@ -25,10 +25,9 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Double tap to drop a pin and view photos" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Azd-Ky-xd3">
-                                        <rect key="frame" x="25" y="30" width="325" height="30"/>
+                                        <rect key="frame" x="33" y="30" width="309" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="797-cb-tpN"/>
-                                            <constraint firstAttribute="width" constant="325" id="Byl-ip-POl"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -240,7 +240,33 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
             
         }
     }
+
+}
+
+//MARK: 3D TOUCH FROM IMAGE
+extension MapVC: UIViewControllerPreviewingDelegate {
     
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if let indexPath = collectionView?.indexPathForItem(at: location) {
+            let cell = collectionView?.cellForItem(at: indexPath)
+            
+            if let popVC = storyboard?.instantiateViewController(withIdentifier: "PopVC") as? PopVC {
+                let image = API.instance.imageArray[indexPath.row]
+                popVC.initData(forImage: image)
+                
+                previewingContext.sourceRect = (cell?.contentView.frame)!   // size
+                return popVC
+            }else {
+                return nil
+            }
+        }else {
+            return nil
+        }
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
     
     
 }
