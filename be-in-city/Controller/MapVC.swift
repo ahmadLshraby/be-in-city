@@ -40,6 +40,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         collectionView?.dataSource = self
         collectionView?.backgroundColor = #colorLiteral(red: 0.9597846866, green: 0.6503693461, blue: 0.1371207833, alpha: 1)
         
+        registerForPreviewing(with: self, sourceView: collectionView!)   // add 3D touch
+        
         pullUpView.addSubview(collectionView!)
     }
     
