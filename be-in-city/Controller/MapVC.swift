@@ -125,7 +125,6 @@ extension MapVC: MKMapViewDelegate {
         if annotation is MKUserLocation {   // to not change our location pin
             return nil
         }
-        
         let pinAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: annotationId)
         pinAnnotation.pinTintColor = #colorLiteral(red: 0.9597846866, green: 0.6503693461, blue: 0.1371207833, alpha: 1)
         pinAnnotation.animatesDrop = true
@@ -142,18 +141,22 @@ extension MapVC: MKMapViewDelegate {
             return
         }
     }
-    
+    // to use when user double tab on the screen
     @objc func dropPin(sender: UITapGestureRecognizer) {
         removePin()   // if there was no pin it consider that your current location is a default annotation
         removeSpinner()   // as when we drop a pin it creates another spinner above the old one
         removeProgreeLbl()
         API.instance.cancelAllSession()   // cancel downloading
         
+        API.instance.imageUrlArray = []
+        API.instance.imageArray = []
+        self.collectionView?.reloadData()
+        
         animateViewUp()
         addSpinner()
         addProgressLbl()
         addSwipe()
-        
+        // after that add the new pin
         // add touchPoint to convert the dropped pin to the exact location
         let touchPoint = sender.location(in: mapView)
         print(touchPoint)   // get locations X, Y of the view
@@ -170,10 +173,10 @@ extension MapVC: MKMapViewDelegate {
         API.instance.getUrl(forAnnotation: annotation) { (success) in
             if success == true {
             API.instance.getImages(forProgressLbl: self.progressLbl!, handler: { (success) in
-                if success == true {
+                if success == true {   // remove the spinner and progressLbl to reload the collectionView and display photos
                     self.removeSpinner()   // hide spinner
                     self.removeProgreeLbl()   // hide label
-                    // reload collectionView
+                    self.collectionView?.reloadData()   // reload collectionView
                 }
             })
             }
@@ -189,7 +192,7 @@ extension MapVC: MKMapViewDelegate {
 }
 
 
-
+// MARK: LOCATION MANAGER
 extension MapVC: CLLocationManagerDelegate {
     // to check if app is authorized to use location
     func configureLocationServices() {
@@ -205,7 +208,7 @@ extension MapVC: CLLocationManagerDelegate {
     }
 }
 
-
+// MARK: COLLECTION VIEW CONFIGURATION
 extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -213,15 +216,31 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return API.instance.imageArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? PhotoCell {
-            
+            let imageFromArray = API.instance.imageArray[indexPath.row]
+            let imageView = UIImageView(image: imageFromArray)
+            cell.addSubview(imageView)
             return cell
         }else {
         return UICollectionViewCell()
         }
     }
+    // go to PopVC when select an item
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let popVC = storyboard?.instantiateViewController(withIdentifier: "PopVC") as? PopVC {
+            let imageFromArrayIndex = API.instance.imageArray[indexPath.row]
+            popVC.initData(forImage: imageFromArrayIndex)
+            present(popVC, animated: true)
+    }else {
+            return
+            
+        }
+    }
+    
+    
+    
 }
