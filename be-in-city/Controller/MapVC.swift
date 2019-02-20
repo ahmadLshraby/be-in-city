@@ -35,7 +35,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         addDoubleTab()
         
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: flowLayout)   // instantiate
-        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: "photoCell")  // register cell
+        collectionView?.register(PhotoCell.self, forCellWithReuseIdentifier: cellId)  // register cell
         collectionView?.delegate = self
         collectionView?.dataSource = self
         collectionView?.backgroundColor = #colorLiteral(red: 0.9597846866, green: 0.6503693461, blue: 0.1371207833, alpha: 1)
@@ -65,6 +65,8 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
         pullUpView.addGestureRecognizer(swipe)
     }
     @objc func animateViewDown() {
+        API.instance.cancelAllSession()  // to cancel downloading
+        
         pullUpViewHeightCons.constant = 0
         UIView.animate(withDuration: 0.3) {
             self.view.layoutIfNeeded()
@@ -90,7 +92,7 @@ class MapVC: UIViewController, UIGestureRecognizerDelegate {
     func addProgressLbl() {
         progressLbl = UILabel()   // instatiate
         progressLbl?.frame = CGRect(x: (screenSize.width / 2) - 100, y: 175, width: 200, height: 40)
-        progressLbl?.font = UIFont(name: "Avenir Next", size: 18)
+        progressLbl?.font = UIFont(name: "Avenir Next", size: 14)
         progressLbl?.textColor = #colorLiteral(red: 0.2126879096, green: 0.2239724994, blue: 0.265286684, alpha: 1)
         progressLbl?.textAlignment = .center
         collectionView?.addSubview(progressLbl!)
@@ -124,7 +126,7 @@ extension MapVC: MKMapViewDelegate {
             return nil
         }
         
-        let pinAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "droppablePin")
+        let pinAnnotation = MKPinAnnotationView(annotation: annotation, reuseIdentifier: annotationId)
         pinAnnotation.pinTintColor = #colorLiteral(red: 0.9597846866, green: 0.6503693461, blue: 0.1371207833, alpha: 1)
         pinAnnotation.animatesDrop = true
         return pinAnnotation
@@ -145,6 +147,7 @@ extension MapVC: MKMapViewDelegate {
         removePin()   // if there was no pin it consider that your current location is a default annotation
         removeSpinner()   // as when we drop a pin it creates another spinner above the old one
         removeProgreeLbl()
+        API.instance.cancelAllSession()   // cancel downloading
         
         animateViewUp()
         addSpinner()
@@ -158,11 +161,23 @@ extension MapVC: MKMapViewDelegate {
         let touchCoordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
         print(touchCoordinate)   // get long, lat
         // instance
-        let annotation = DroppablePin(coordinate: touchCoordinate, identifier: "droppablePin")
+        let annotation = DroppablePin(coordinate: touchCoordinate, identifier: annotationId)
         mapView.addAnnotation(annotation)   // show dropped pin on map
         // to center the map on the dropped pin
                     let coordinateRegion = MKCoordinateRegion(center: touchCoordinate, latitudinalMeters: regionRadius * 2.0, longitudinalMeters: regionRadius * 2.0)
         mapView.setRegion(coordinateRegion, animated: true)
+        
+        API.instance.getUrl(forAnnotation: annotation) { (success) in
+            if success == true {
+            API.instance.getImages(forProgressLbl: self.progressLbl!, handler: { (success) in
+                if success == true {
+                    self.removeSpinner()   // hide spinner
+                    self.removeProgreeLbl()   // hide label
+                    // reload collectionView
+                }
+            })
+            }
+        }
     }
     
     // To remove the old dropped pin when we drop a new one
@@ -202,7 +217,7 @@ extension MapVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as? PhotoCell {
+        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as? PhotoCell {
             
             return cell
         }else {
