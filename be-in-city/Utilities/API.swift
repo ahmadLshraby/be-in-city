@@ -40,7 +40,7 @@ class API: NSObject {
             let photosDict = json["photos"] as! Dictionary<String, Any>
             let photosDictArray = photosDict["photo"] as! [Dictionary<String, Any>]
             for photo in photosDictArray {
-                let postUrl = "https://farm\(photo["farm"]!).staticflickr.com/\(photo["server"]!)/\(photo["id"]!)_\(photo["secret"]!)_h_d.jpg"
+                let postUrl = "https://farm\(photo["farm"]!).staticflickr.com/\(photo["server"]!)/\(photo["id"]!)_\(photo["secret"]!)_c_d.jpg"
                 self.imageUrlArray.append(postUrl)
                 print(postUrl)
             }

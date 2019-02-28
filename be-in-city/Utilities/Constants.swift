@@ -10,7 +10,7 @@ import Foundation
 
 let apiKey = "30e623e2eaf002f0c5bbe9f25e498791"
 let flickrURL = "https://api.flickr.com/services/rest/"
-let photoUrl = "https://farm8.staticflickr.com/7810/46423835904_a414e8bafd_h_d.jpg"  // to handle the json from getUrl
+let photoUrl = "https://farm8.staticflickr.com/7810/46423835904_a414e8bafd_c_d.jpg"  // to handle the json from getUrl
 
 
 let annotationId = "droppablePin"
